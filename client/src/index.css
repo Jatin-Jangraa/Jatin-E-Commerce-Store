@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }}
+
+   .phoneinput::-webkit-outer-spin-button,
+ .phoneinput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+ }
+
+   .labelclass{
+  @apply font-semibold  ;
+ }
+
+
+ .inputclass{
+  @apply p-2 rounded-xl border-[1.3px]  
+ }
+
+
+  .contactclass{
+  @apply w-full  p-3 mb-4  border-[1px] rounded
+ }
+
+
+  .tableclass{
+  @apply p-[1rem] text-center 
+ }
+
+   .btnclass{
+  @apply py-1 px-4 border-0 rounded cursor-pointer 
+ }
+
+
+    .buttonclass{
+  @apply py-1 px-2 border-0 rounded cursor-pointer h-[40px]
+ } 
+
+ 

@@ -1,0 +1,10 @@
+import express from 'express';
+import { allproducts, newproduct } from '../Controller/Product.controller.js';
+const productroute = express.Router();
+productroute.post("/newproduct", newproduct);
+productroute.put("/update/:id", () => { });
+productroute.put("/:id/remove-image", () => { });
+productroute.get("/all", allproducts);
+productroute.get("product/:id", () => { });
+productroute.delete("/delete/:id", () => { });
+export default productroute;
