@@ -9,111 +9,41 @@ import Bestcateitems from '../../Components/Bestcateitems';
 import Category from '../../Components/Category';
 import ImageSlider from '../../Components/ImageSlider';
 import Items from '../../Components/Items';
+import { productapi } from '../../Api';
+import { useEffect, useState } from 'react';
 
 
 const Home = () => {
 
-   const bestdata ={
-    name:"Best of Electronics",
-    items:[
-      {name:"Earbuds",
-       image:phone,
-      },
-      {name:"Earbuds",
-       image:phone,
-      },
-      {name:"Earbuds",
-       image:phone,
-      },
-      {name:"Earbuds",
-       image:phone,
-      },
-        {name:"Earbuds",
-       image:phone,
-      },
-      {name:"Earbuds",
-       image:phone,
-      },
-      {name:"Earbuds",
-       image:phone,
-      },
-      {name:"Earbuds",
-       image:phone,
-      }
-    ]
-  }
 
-   const catedata ={
-    name:"Beauty,Food,Toys ",
-    items:[
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-        {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      }
-    ]
-  }
+  interface Product {
+    _id : String , 
+    name : String ,
+    price :number ,
+    discount :number ,
+    quantity :Number ,
+    available : Boolean ,
+    image : String[] ,
+    colors :String[],
+    rating : Number[] ,
+    category :String ,
+    subcategory : string ,
+    createdAt :String ,
+    updatedAt :String ,
 
-   const sportsdata ={
-    name:"Sports , Health Care & More ",
-    items:[
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-        {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      },
-      {name:"Earbuds",
-       image:phone1,
-      }
-    ]
   }
 
 
-  const myitems =[
-    {name:"jatin" , image: phone },
-    {name:"abc" ,image:phone1},
-    {name:"jatin" , image: phone },
-    {name:"abc" ,image:phone1},
-     {name:"jatin" , image: phone },
-    {name:"abc" ,image:phone1},
-    {name:"jatin" , image: phone },
-    {name:"abc" ,image:phone1},
-  ]
+  interface itemcate {
+    name :string ,
+    items :Product[]
+  }
+
+
+
+
+
+
 
   const slides = [
   { id: 1, image: air },
@@ -121,69 +51,69 @@ const Home = () => {
   { id: 3, image:air },
 ];
 
-const itemdata =[
 
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
+const [itemdata , setdata] = useState< null | Product[]>(null);
+const [catedat , setcatedat] = useState <null | itemcate[]>(null) 
+const [subcate ,setsubcate] = useState <null | Product[]>(null)
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
+console.log(subcate);
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
+const catedata = async () =>{
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
+  try {
+    
+    const res = await productapi.get('/allsubcate')
 
-  },
-   {
-    name:"phone",
-    image:phone,
-    price:10000,
+    setsubcate(res.data)
 
-  },
+  } catch (error) {
+    
+  }
 
-]
+}
+
+
+const fetchdata = async ()=>{
+  try {  
+  const res = await productapi.get("/all")
+    setdata(res.data)
+  } catch (error) {
+    
+  }
+}
+
+
+
+
+
+const getdata = async () =>{
+
+  try {
+    
+    const res = await productapi.get("/itemcate")
+
+    setcatedat(res.data)
+
+  } catch (error) {
+    
+  }
+
+
+
+}
+
+
+useEffect(() => {
+
+  fetchdata() ;
+  getdata();
+  catedata()
+
+}, [])
 
 
   return (
@@ -194,19 +124,39 @@ const itemdata =[
 </Link>
         
 
-<Category  items={myitems} />
+
+{subcate ? 
+<Category  items={subcate} />
+:""}
+
 
 <ImageSlider slides={slides}/>
 
 
-<Bestcateitems bestdata={bestdata}/>
 
-<Bestcateitems bestdata={catedata}/>
+{catedat ? 
+ 
+ <>
+ {catedat.map((bestdata)=>{
+    return (
+      <Bestcateitems bestdata={bestdata}/>
+    )
+ })}
+ </>
 
-<Bestcateitems bestdata={sportsdata}/>
+:""}
 
 
+{/* <Bestcateitems bestdata={bestdata}/> */}
+
+{/* <Bestcateitems bestdata={catedata}/> */}
+
+{/* <Bestcateitems bestdata={sportsdata}/> */}
+
+
+{itemdata ? 
 <Items itemdata = {itemdata}/>
+:""}
 
     </div>
 

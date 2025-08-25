@@ -5,21 +5,65 @@ import { IoMdShareAlt } from "react-icons/io";
 import { FaStar } from "react-icons/fa";
 import { FaArrowDown } from "react-icons/fa";
 import { RiTruckLine } from "react-icons/ri";
+import { useParams } from "react-router-dom";
+import { productapi } from "../../Api";
+import { useEffect, useState } from "react";
 
 const Product = () => {
-  return (
-    <div className="w-full h-[calc(100vh-4rem)]  px-0 py-4 overflow-y-scroll no-scrollbar">
+
+    interface Product {
+    _id : String , 
+    name : String ,
+    price :number ,
+    discount :number ,
+    quantity :Number ,
+    available : Boolean ,
+    image : String[] ,
+    colors :String[],
+    rating : Number[] ,
+    category :String ,
+    subcategory : string ,
+    createdAt :String ,
+    updatedAt :String ,
+
+  }
+
+  const { id } = useParams()
+
+  const [data , setdata] = useState<null | Product>(null)
+
+  const fetchdata = async ()=>{
+    try {
+      
+      const res =await productapi.get(`/${id}`)
+
+      setdata(res.data)
+
+    } catch (error) {
+      
+    }
+  }
+
+
+  useEffect(() => {
+  fetchdata()
+  }, [])
+  
+
+  return (<>
+   {data ? 
+     <div className="w-full h-[calc(100vh-4rem)]  px-0 py-4 overflow-y-scroll no-scrollbar">
          <div className=" h-auto md:flex-row md:justify-evenly md:px-15  w-full py-2 bg-white  flex flex-col  items-center">
         <img src={phone} alt="" className=" w-4/5 md:w-80 justify-self-center" />
 
         <div className="flex gap-2 my-5 py-0 flex-wrap w-full px-10 justify-center">
-          <button className="bg-red-700 w-8 h-8 rounded-full"></button>
-          <button className="bg-blue-700 w-8 h-8 rounded-full"></button>
-          <button className="bg-pink-700 w-8 h-8 rounded-full"></button>
-          <button className="bg-yellow-300 w-8 h-8 rounded-full"></button>
-          <button className="bg-white border-2  w-8 h-8 rounded-full"></button>
-          <button className="bg-black w-8 h-8 rounded-full"></button>
-          <button className="bg-neutral-500 w-8 h-8 rounded-full"></button>
+
+          {data.colors.map((itm)=>{
+            return  <button className={` w-8 h-8 rounded-full`} style={{backgroundColor:`${itm}`}} ></button>
+          })}
+
+         
+        
         </div>
 
         <div className="flex px-5  md:flex-col py-1 gap-2 w-full md:w-1/3   text-xl ">
@@ -34,7 +78,7 @@ const Product = () => {
 
       <div className="bg-white my-3 px-5 py-2">
         <p className="text-xl font-semibold  py-3">
-          Phone .Best Quality Smart Phone with android suppot.
+        {data.name}
         </p>
 
         <div className="flex items-center gap-4 px-3 py-2">
@@ -52,7 +96,7 @@ const Product = () => {
 
           <p className="text-blue-700 font-semibold">Good</p>
 
-          <p className="text-blue-500">102 ratings</p>
+          {data.rating.length>0 ? <p className="text-blue-500">{data.rating.length}ratings</p> :""}
         </div>
 
 
@@ -60,28 +104,28 @@ const Product = () => {
 
         <div className="flex items-center my-0 gap-3 px-3">
         <div className="flex items-center text-green-600">
-          {10 > 0 ? (
+          {data.discount > 0 ? (
             <>
               <span>
                 <FaArrowDown />
               </span>
-              <span>{10} %</span>
+              <span>{data.discount} %</span>
             </>
           ) : (
             ""
           )}
         </div>
 
-        {10 > 0 ? (
+        {data.discount > 0 ? (
           <span className="line-through text-gray-600 font-semibold">
-            ₹{1000}
+            ₹{data.price}
           </span>
         ) : (
           ""
         )}
 
         <span className="font-bold text-xl">
-          ₹{Math.floor(1000 - (1000 * 10) / 100)}
+          ₹{Math.floor(data.price - (data.price * data.discount) / 100)}
         </span>
       </div>
 
@@ -108,7 +152,8 @@ const Product = () => {
         </button>
       </div>
     </div>
-  )
+    :""}
+  </>)
 }
 
 export default Product

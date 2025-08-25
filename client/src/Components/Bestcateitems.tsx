@@ -1,8 +1,20 @@
 // import React from 'react'
+import phone from '../assets/phone.png'
 
 interface itm {
-    name:string,
-    image :string,
+    _id : String , 
+    name : String ,
+    price :number ,
+    discount :number ,
+    quantity :Number ,
+    available : Boolean ,
+    image : String[] ,
+    colors :String[],
+    rating : Number[] ,
+    category :String ,
+    subcategory : string ,
+    createdAt :String ,
+    updatedAt :String ,
 }
 
 interface bestdatatype {
@@ -16,13 +28,15 @@ interface data {
 
 
 const Bestcateitems = ({bestdata}:data) => {
+
+    
   return (
     <div className=' bg-neutral-100  my-7  mx-3 px-0 py-2 lg:py-3  lg:mx-4'>
         <h1 className="text-xl mx-3 py-2 font-bold lg:pb-2 ">{bestdata.name}</h1>
         <div className='flex gap-4 lg:gap-10 bg-neutrsl-300   w-full overflow-auto no-scrollbar'>
             {bestdata.items.map((cate,index)=>(
                 <div key={index} className="min-w-[120px] rounded bg-white  lg:min-w-[180px]">
-                    <img src={cate.image} alt="" className="pb-2 rounded" />
+                    <img src={phone} alt="" className="pb-2 rounded" />
                     <p className="text-center font-semibold">{cate.name}</p>
                 </div>
                 ))}
